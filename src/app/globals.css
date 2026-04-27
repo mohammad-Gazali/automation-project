@@ -1,26 +1,198 @@
 @import "tailwindcss";
 
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  --surface: #f8f9ff;
+  --surface-dim: #cbdbf5;
+  --surface-bright: #f8f9ff;
+  --surface-container-lowest: #ffffff;
+  --surface-container-low: #eff4ff;
+  --surface-container: #e5eeff;
+  --surface-container-high: #dce9ff;
+  --surface-container-highest: #d3e4fe;
+  --on-surface: #0b1c30;
+  --on-surface-variant: #434656;
+  --inverse-surface: #213145;
+  --inverse-on-surface: #eaf1ff;
+  --outline: #737688;
+  --outline-variant: #c3c5d9;
+  --surface-tint: #004ced;
+  --primary: #003ec7;
+  --on-primary: #ffffff;
+  --primary-container: #0052ff;
+  --on-primary-container: #dfe3ff;
+  --inverse-primary: #b7c4ff;
+  --secondary: #565e74;
+  --on-secondary: #ffffff;
+  --secondary-container: #dae2fd;
+  --on-secondary-container: #5c647a;
+  --tertiary: #005474;
+  --on-tertiary: #ffffff;
+  --tertiary-container: #006e95;
+  --on-tertiary-container: #caeaff;
+  --error: #ba1a1a;
+  --on-error: #ffffff;
+  --error-container: #ffdad6;
+  --on-error-container: #93000a;
+  --background: #f8f9ff;
+  --on-background: #0b1c30;
+  --surface-variant: #d3e4fe;
 }
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+@layer base {
+  html, body, #__next {
+    height: 100%;
+    font-family: var(--font-space-grotesk, 'Space Grotesk'), Arial, Helvetica, sans-serif;
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+  }
+  body {
+    background: var(--background);
+    color: var(--on-surface);
   }
 }
 
-body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+/* Theme-aware utility classes using CSS variables to be used with Tailwind classes */
+
+.header {
+  @apply flex items-center justify-between px-6 py-4;
+  background: var(--surface-container-lowest);
+  border-bottom: 1px solid var(--outline);
+  color: var(--on-surface);
+}
+
+.brand-mark {
+  width: 2.5rem;
+  height: 2.5rem;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--primary);
+  color: var(--on-primary);
+  font-weight: 700;
+  border-radius: 0;
+}
+
+.btn-primary {
+  @apply px-3 py-1 text-sm font-medium;
+  background: var(--primary);
+  color: var(--on-primary);
+  border-radius: 0;
+}
+
+.btn-ghost {
+  @apply px-3 py-1 text-sm;
+  background: var(--surface-container-lowest);
+  color: var(--on-surface);
+  border: 1px solid var(--outline);
+  border-radius: 0;
+}
+
+.sidebar {
+  @apply w-72 p-4 h-full overflow-y-auto;
+  background: var(--surface-container-lowest);
+  border-right: 1px solid var(--outline);
+  color: var(--on-surface);
+  min-height: 0;
+}
+
+.sidebar-heading {
+  color: var(--on-surface-variant);
+  font-weight: 600;
+  text-transform: uppercase;
+  font-size: 0.75rem;
+  letter-spacing: 0.1em;
+}
+
+.list-item {
+  @apply p-2 cursor-pointer;
+  background: var(--surface-container-lowest);
+  color: var(--on-surface);
+  transition: background 0.2s, border 0.2s;
+}
+
+.list-item:hover {
+  background: var(--surface-container-low);
+}
+
+.component-btn {
+  @apply text-sm text-left px-3 py-2;
+  border: 1px solid var(--outline);
+  background: var(--surface-container);
+  color: var(--on-surface);
+  border-radius: 0;
+}
+
+.canvas {
+  @apply flex flex-col flex-1 p-6 overflow-hidden;
+  background: var(--surface-container);
+  color: var(--on-surface);
+  min-height: 0;
+}
+
+.canvas-box {
+  @apply flex-1 p-6;
+  display: flex;
+  flex-direction: column;
+  border: 1px dashed var(--outline);
+  background: var(--surface-container-lowest);
+  border-radius: 0;
+  position: relative;
+  overflow: hidden;
+  min-height: 0;
+}
+
+.canvas-inner {
+  margin-top: 1.5rem;
+  height: 26.25rem; /* 420px */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--outline-variant);
+  border: 1px solid var(--surface-container-high);
+  border-radius: 0;
+}
+
+.connect-lines {
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+}
+
+.node-card {
+  @apply p-2;
+  border: 1px solid var(--outline);
+  background: var(--surface-container-lowest);
+  color: var(--on-surface);
+  border-radius: 6px;
+  box-shadow: 0 4px 10px rgba(15, 23, 42, 0.06);
+}
+
+.node-header {
+  font-size: 0.65rem;
+  color: var(--on-surface-variant);
+  margin-bottom: 4px;
+}
+
+.node-body {
+  font-size: 0.95rem;
+  color: var(--on-surface);
+}
+
+.details {
+  @apply w-80 p-4 h-full overflow-y-auto;
+  background: var(--surface-container-lowest);
+  border-left: 1px solid var(--outline);
+  color: var(--on-surface);
+  min-height: 0;
+}
+
+.card {
+  padding: 0.75rem;
+  border: 1px solid var(--surface-container-high);
+  border-radius: 0;
+  background: var(--surface-container);
 }
