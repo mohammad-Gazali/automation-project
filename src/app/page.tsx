@@ -1,98 +1,33 @@
 "use client";
-import React from "react";
-import Header from "../components/Header";
-import Sidebar from "../components/Sidebar";
-import BuilderCanvas from "../components/BuilderCanvas";
-import SchemeDetails from "../components/SchemeDetails";
-import { useNodesState, useEdgesState, addEdge } from "reactflow";
+
+import { useEffect } from "react";
+import { useRouter } from "next/navigation";
+import { useAuth } from "@/context/AuthContext";
 
 export default function Home() {
-  const [title, setTitle] = React.useState("Untitled flow");
-  const [nodes, setNodes, onNodesChange] = useNodesState([]);
-  const [edges, setEdges, onEdgesChange] = useEdgesState([]);
-  const [output, setOutput] = React.useState<string[]>([]);
-  const [savedFlows, setSavedFlows] = React.useState<any[]>([]);
+  const router = useRouter();
+  const { isAuthenticated, isLoading } = useAuth();
 
-  const addNode = React.useCallback((type: string, position: any) => {
-    const id = `${type}-${Date.now()}`;
-    const node = {
-      id,
-      type,
-      position,
-      data: {
-        props: type === "log" ? { message: "Log message" } : { color: "#0052ff" },
-      },
-    };
-    setNodes((nds: any[]) => {
-      const last = nds.length > 0 ? nds[nds.length - 1] : null;
-      const newNodes = nds.concat(node);
-      if (last) {
-        const newEdge = { id: `e-${last.id}-${id}`, source: last.id, target: id, animated: true };
-        setEdges((eds: any[]) => eds.concat(newEdge));
+  useEffect(() => {
+    if (!isLoading) {
+      if (isAuthenticated) {
+        router.replace("/dashboard");
+      } else {
+        router.replace("/login");
       }
-      return newNodes;
-    });
-  }, [setNodes, setEdges]);
-
-  const onConnect = React.useCallback((params: any) => setEdges((eds: any[]) => addEdge(params, eds)), [setEdges]);
-
-  const runFlow = React.useCallback(() => {
-    const lines: string[] = [];
-    for (const n of nodes) {
-      if (n.type === "log") lines.push(`LOG: ${n.data?.props?.message ?? "(empty)"}`);
-      if (n.type === "color") lines.push(`COLOR: set to ${n.data?.props?.color ?? "#000"}`);
     }
-    if (lines.length === 0) lines.push("(no nodes to run)");
-    setOutput(lines);
-  }, [nodes]);
-
-  const saveFlow = React.useCallback(() => {
-    const id = `flow-${Date.now()}`;
-    setSavedFlows((s) => [...s, { id, title, nodes, edges }]);
-  }, [title, nodes, edges]);
-
-  const loadFlow = React.useCallback((id: string) => {
-    const f = savedFlows.find((sf) => sf.id === id);
-    if (f) {
-      setTitle(f.title);
-      setNodes(f.nodes || []);
-      setEdges(f.edges || []);
-      setOutput([]);
-    }
-  }, [savedFlows, setNodes, setEdges]);
+  }, [isLoading, isAuthenticated, router]);
 
   return (
-    <div className="h-screen flex flex-col bg-white">
-      <Header onRun={runFlow} />
-      <div className="flex-1 flex overflow-hidden">
-        <Sidebar onPlay={runFlow} />
-        <div className="flex-1 flex flex-col min-h-0">
-          <BuilderCanvas
-            title={title}
-            setTitle={setTitle}
-            nodes={nodes}
-            edges={edges}
-            onNodesChange={onNodesChange}
-            onEdgesChange={onEdgesChange}
-            onConnect={onConnect}
-            onAddNode={addNode}
-          />
-
-          <div className="h-48 p-4 border-t bg-[var(--surface-container-lowest)] overflow-auto">
-            <h3 className="font-semibold">Output</h3>
-            <div className="mt-2">
-              {output.length === 0 ? (
-                <div className="text-sm text-[var(--on-surface-variant)]">No output yet. Run the flow.</div>
-              ) : (
-                output.map((l: any, idx: number) => (
-                  <div key={idx} className="text-sm font-mono text-[var(--on-surface)]">{l}</div>
-                ))
-              )}
-            </div>
-          </div>
+    <div className="min-h-screen flex items-center justify-center bg-[var(--surface)]">
+      <div className="text-center">
+        <div className="inline-flex items-center justify-center w-12 h-12 bg-[var(--primary)] text-[var(--on-primary)] font-bold text-lg mb-4">
+          V
         </div>
-
-        <SchemeDetails savedFlows={savedFlows} onSaveFlow={saveFlow} onLoadFlow={loadFlow} />
+        <svg className="animate-spin h-6 w-6 mx-auto text-[var(--primary)]" viewBox="0 0 24 24">
+          <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" fill="none" />
+          <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z" />
+        </svg>
       </div>
     </div>
   );

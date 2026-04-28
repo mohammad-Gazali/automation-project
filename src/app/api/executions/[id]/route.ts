@@ -1,0 +1,8 @@
+import { NextRequest } from "next/server";
+import { withAuth } from "@/middleware/auth.middleware";
+import { handleGetExecution } from "@/modules/executions/execution.controller";
+
+export const GET = withAuth(async (userId, _email, _request, context) => {
+  const executionId = context.params.id;
+  return handleGetExecution(userId, executionId);
+});
