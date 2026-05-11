@@ -3,6 +3,6 @@ import { withAuth } from "@/middleware/auth.middleware";
 import { handleGetExecution } from "@/modules/executions/execution.controller";
 
 export const GET = withAuth(async (userId, _email, _request, context) => {
-  const executionId = context.params.id;
+  const { id: executionId } = await context.params;
   return handleGetExecution(userId, executionId);
 });
