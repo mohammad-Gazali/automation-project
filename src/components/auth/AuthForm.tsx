@@ -23,7 +23,7 @@ export function InputField({
 }: InputFieldProps) {
   return (
     <div className="mb-4">
-      <label className="block text-xs font-semibold uppercase tracking-wider text-[var(--on-surface-variant)] mb-1.5">
+      <label className="mb-1.5 block text-xs font-semibold text-[var(--on-surface)]">
         {label} {required && <span className="text-[var(--error)]">*</span>}
       </label>
       <input
@@ -31,10 +31,10 @@ export function InputField({
         value={value}
         onChange={(e) => onChange(e.target.value)}
         placeholder={placeholder}
-        className={`w-full px-3 py-2 text-sm border bg-[var(--surface-container-lowest)] text-[var(--on-surface)] placeholder-[var(--on-surface-variant)] outline-none transition-colors ${
+        className={`field-control text-sm placeholder:text-[var(--on-surface-variant)] ${
           error
-            ? "border-[var(--error)] focus:border-[var(--error)]"
-            : "border-[var(--outline)] focus:border-[var(--primary)]"
+            ? "!border-[var(--error)] focus:!border-[var(--error)]"
+            : ""
         }`}
       />
       {error && (
@@ -71,19 +71,54 @@ export function AuthForm({
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-[var(--surface)] px-4">
-      <div className="w-full max-w-md">
-        <div className="mb-8 text-center">
-          <div className="inline-flex items-center justify-center w-12 h-12 bg-[var(--primary)] text-[var(--on-primary)] font-bold text-lg mb-4">
-            V
+    <div className="grid min-h-screen grid-cols-1 bg-[var(--surface)] lg:grid-cols-[1.05fr_0.95fr]">
+      <section className="hidden min-h-screen flex-col justify-between border-r border-[var(--outline-variant)] bg-[var(--on-surface)] p-10 text-white lg:flex">
+        <div className="flex items-center gap-3">
+          <div className="brand-mark">V</div>
+          <div>
+            <div className="text-sm font-semibold">Visual Automation Studio</div>
+            <div className="text-xs text-white/60">Workflow operations, redesigned</div>
           </div>
-          <h1 className="text-2xl font-semibold text-[var(--on-surface)]">{title}</h1>
-          <p className="mt-2 text-sm text-[var(--on-surface-variant)]">{subtitle}</p>
         </div>
 
-        <div className="bg-[var(--surface-container-lowest)] border border-[var(--outline-variant)] p-6">
+        <div className="max-w-xl">
+          <p className="kicker !text-white/60">Automation workspace</p>
+          <h2 className="mt-4 text-4xl font-semibold leading-tight">
+            Build, run, and understand workflows from one focused command center.
+          </h2>
+          <p className="mt-5 text-sm leading-6 text-white/68">
+            Manage flows, inspect execution history, and work with an AI assistant that understands your project context.
+          </p>
+        </div>
+
+        <div className="grid grid-cols-3 gap-3 text-sm">
+          {["Nodes", "Runs", "Assistant"].map((item) => (
+            <div key={item} className="rounded-lg border border-white/10 bg-white/5 p-4">
+              <div className="text-lg font-semibold">{item}</div>
+              <div className="mt-1 text-xs text-white/56">Production ready</div>
+            </div>
+          ))}
+        </div>
+      </section>
+
+      <section className="flex min-h-screen items-center justify-center px-4 py-8 sm:px-6">
+        <div className="w-full max-w-md">
+          <div className="mb-8">
+            <div className="mb-5 flex items-center gap-3 lg:hidden">
+              <div className="brand-mark">V</div>
+              <div>
+                <div className="text-sm font-semibold text-[var(--on-surface)]">Visual Automation Studio</div>
+                <div className="text-xs text-[var(--on-surface-variant)]">Workflow operations</div>
+              </div>
+            </div>
+            <p className="kicker">Secure access</p>
+            <h1 className="mt-2 text-3xl font-semibold tracking-tight text-[var(--on-surface)]">{title}</h1>
+            <p className="mt-2 text-sm leading-6 text-[var(--on-surface-variant)]">{subtitle}</p>
+          </div>
+
+          <div className="panel p-6">
           {error && (
-            <div className="mb-4 p-3 bg-[var(--error-container)] border border-[var(--error)] text-[var(--on-error-container)] text-sm">
+            <div className="mb-4 rounded-md border border-[#fda29b] bg-[var(--error-container)] p-3 text-sm text-[var(--on-error-container)]">
               {error}
             </div>
           )}
@@ -94,7 +129,7 @@ export function AuthForm({
             <button
               type="submit"
               disabled={isSubmitting}
-              className="w-full mt-2 px-4 py-2.5 text-sm font-medium bg-[var(--primary)] text-[var(--on-primary)] border-none cursor-pointer transition-opacity disabled:opacity-50 hover:opacity-90"
+              className="button-primary mt-2 w-full disabled:opacity-50"
             >
               {isSubmitting ? (
                 <span className="flex items-center justify-center gap-2">
@@ -109,14 +144,15 @@ export function AuthForm({
               )}
             </button>
           </form>
-        </div>
-
-        {footer && (
-          <div className="mt-4 text-center text-sm text-[var(--on-surface-variant)]">
-            {footer}
           </div>
-        )}
-      </div>
+
+          {footer && (
+            <div className="mt-5 text-center text-sm text-[var(--on-surface-variant)]">
+              {footer}
+            </div>
+          )}
+        </div>
+      </section>
     </div>
   );
 }

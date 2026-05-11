@@ -52,6 +52,15 @@ export default function FlowCanvas({
     transform: CustomNodes.TransformNode,
     delay: CustomNodes.DelayNode,
     condition: CustomNodes.ConditionNode,
+    set: CustomNodes.ActionNode,
+    filter: CustomNodes.ActionNode,
+    math: CustomNodes.ActionNode,
+    merge: CustomNodes.ActionNode,
+    email: CustomNodes.ActionNode,
+    database: CustomNodes.ActionNode,
+    webhook: CustomNodes.ActionNode,
+    schedule: CustomNodes.ActionNode,
+    aiPrompt: CustomNodes.ActionNode,
   }), []);
 
   const handleDrop = useCallback(
@@ -82,7 +91,7 @@ export default function FlowCanvas({
   );
 
   return (
-    <div ref={reactFlowWrapper} className="flex-1 min-h-0 relative" onDragOver={onDragOver} onDrop={handleDrop}>
+    <div ref={reactFlowWrapper} className="relative min-h-[360px] flex-1 overflow-hidden bg-[var(--surface-container-low)]" onDragOver={onDragOver} onDrop={handleDrop}>
       <ReactFlow
         nodes={nodes}
         edges={edges}
@@ -102,7 +111,7 @@ export default function FlowCanvas({
           animated: true,
           style: { stroke: "var(--outline)", strokeWidth: 2 },
         }}
-        className="bg-[var(--surface)]"
+        className="bg-transparent"
       >
         <Controls
           className="!bg-[var(--surface-container-lowest)] !border !border-[var(--outline-variant)] !rounded-none !shadow-sm"
@@ -117,10 +126,13 @@ export default function FlowCanvas({
 
       {nodes.length === 0 && (
         <div className="absolute inset-0 flex items-center justify-center pointer-events-none z-10">
-          <div className="text-center">
-            <div className="text-[var(--on-surface)] font-semibold text-lg">Automation Builder</div>
-            <div className="text-[var(--on-surface-variant)] text-sm mt-2">
-              Drag nodes from the left panel to start building
+          <div className="panel max-w-sm p-6 text-center">
+            <div className="mx-auto flex h-12 w-12 items-center justify-center rounded-lg bg-[var(--primary-container)] text-sm font-bold text-[var(--primary)]">
+              FLOW
+            </div>
+            <div className="mt-4 text-lg font-semibold text-[var(--on-surface)]">Build your automation</div>
+            <div className="mt-2 text-sm leading-6 text-[var(--on-surface-variant)]">
+              Drag nodes from the palette, connect them, then save and run the workflow.
             </div>
           </div>
         </div>

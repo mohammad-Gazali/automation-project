@@ -44,6 +44,14 @@ interface TaskListResponse {
   };
 }
 
+interface AssistantResponse {
+  intent: string;
+  reply: string;
+  executionId?: string;
+  queued?: boolean;
+  tasks?: Task[];
+}
+
 interface TaskCreateInput {
   title: string;
   description?: string;
@@ -164,6 +172,22 @@ export const tasksApi = {
   async delete(id: string) {
     return fetchApi<null>(`/api/tasks/${id}`, {
       method: "DELETE",
+    });
+  },
+
+  async execute(id: string, input?: Record<string, unknown>) {
+    return fetchApi<{ executionId: string; status: string; queued: boolean }>(`/api/tasks/${id}/execute`, {
+      method: "POST",
+      body: JSON.stringify({ input }),
+    });
+  },
+};
+
+export const assistantApi = {
+  async send(message: string) {
+    return fetchApi<AssistantResponse>("/api/assistant", {
+      method: "POST",
+      body: JSON.stringify({ message }),
     });
   },
 };

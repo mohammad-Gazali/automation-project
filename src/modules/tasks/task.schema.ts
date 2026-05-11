@@ -32,6 +32,8 @@ export const edgeSchema = z.object({
   id: z.string(),
   source: z.string(),
   target: z.string(),
+  sourceHandle: z.string().nullable().optional(),
+  targetHandle: z.string().nullable().optional(),
   animated: z.boolean().optional(),
 });
 

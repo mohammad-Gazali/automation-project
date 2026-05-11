@@ -1,7 +1,6 @@
 "use client";
 
 import React, { useState } from "react";
-import { tasksApi } from "@/lib/api";
 
 interface OutputPanelProps {
   output: string[];
@@ -42,24 +41,23 @@ export default function OutputPanel({
   }
 
   return (
-    <div className="h-52 bg-[var(--surface-container-lowest)] border-t border-[var(--outline-variant)] flex flex-col">
-      {/* Toolbar */}
-      <div className="flex items-center justify-between px-4 py-2 border-b border-[var(--outline-variant)]">
-        <div className="flex items-center gap-4">
+    <div className="flex h-60 flex-col border-t border-[var(--outline-variant)] bg-[var(--surface-container-lowest)]">
+      <div className="flex flex-col gap-3 border-b border-[var(--outline-variant)] px-4 py-3 md:flex-row md:items-center md:justify-between">
+        <div className="flex min-w-0 flex-col gap-2 sm:flex-row sm:items-center sm:gap-4">
           <input
             type="text"
             value={title}
             onChange={(e) => onTitleChange(e.target.value)}
             placeholder="Flow title"
-            className="px-2 py-1 text-sm border border-[var(--outline)] bg-[var(--surface)] text-[var(--on-surface)] outline-none focus:border-[var(--primary)] w-48"
+            className="field-control w-full text-sm sm:w-64"
           />
           <div className="flex items-center gap-3 text-[11px] text-[var(--on-surface-variant)]">
-            <span>{nodeCount} nodes</span>
-            <span>{edgeCount} connections</span>
+            <span className="rounded-full bg-[var(--surface-container)] px-2 py-1">{nodeCount} nodes</span>
+            <span className="rounded-full bg-[var(--surface-container)] px-2 py-1">{edgeCount} connections</span>
           </div>
         </div>
 
-        <div className="flex items-center gap-2">
+        <div className="flex flex-wrap items-center gap-2">
           {saveStatus === "success" && (
             <span className="text-xs text-green-600">Saved!</span>
           )}
@@ -70,7 +68,7 @@ export default function OutputPanel({
           <button
             onClick={handleSave}
             disabled={isSaving}
-            className="px-3 py-1.5 text-xs border border-[var(--outline)] bg-[var(--surface-container-lowest)] text-[var(--on-surface)] hover:bg-[var(--surface-container-low)] transition-colors disabled:opacity-50"
+            className="button-secondary !px-3 !py-2 text-xs disabled:opacity-50"
           >
             {isSaving ? "Saving..." : "Save to DB"}
           </button>
@@ -78,7 +76,7 @@ export default function OutputPanel({
           <button
             onClick={onRun}
             disabled={isRunning || nodeCount === 0}
-            className="px-3 py-1.5 text-xs bg-[var(--primary)] text-[var(--on-primary)] border-none hover:opacity-90 transition-opacity disabled:opacity-50 flex items-center gap-1.5"
+            className="button-primary !px-3 !py-2 text-xs disabled:opacity-50"
           >
             {isRunning ? (
               <>
@@ -90,7 +88,6 @@ export default function OutputPanel({
               </>
             ) : (
               <>
-                <span>▶</span>
                 Run Flow
               </>
             )}
@@ -99,9 +96,9 @@ export default function OutputPanel({
       </div>
 
       {/* Output content */}
-      <div className="flex-1 overflow-y-auto p-3 font-mono text-xs">
+      <div className="premium-scrollbar flex-1 overflow-y-auto bg-[#0b1220] p-3 font-mono text-xs">
         {output.length === 0 ? (
-          <div className="text-[var(--on-surface-variant)]">
+          <div className="flex h-full items-center justify-center text-slate-400">
             {isRunning ? "Executing flow..." : "No output yet. Run the flow to see results."}
           </div>
         ) : (
@@ -114,13 +111,13 @@ export default function OutputPanel({
                   key={idx}
                   className={`py-0.5 ${
                     isError
-                      ? "text-[var(--error)]"
+                      ? "text-red-300"
                       : isWarn
-                      ? "text-amber-600"
-                      : "text-[var(--on-surface)]"
+                      ? "text-amber-300"
+                      : "text-slate-200"
                   }`}
                 >
-                  <span className="text-[var(--on-surface-variant)] mr-2">{String(idx + 1).padStart(2, "0")}</span>
+                  <span className="mr-2 text-slate-500">{String(idx + 1).padStart(2, "0")}</span>
                   {line}
                 </div>
               );
